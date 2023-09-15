@@ -225,7 +225,10 @@ preferences_means %>%
                 hjust = horizontal),
             size = 3,
             nudge_x = if_else(preferences_means$type == "pre", -0.05, 0.05)) +
-  scale_x_continuous(limits = c(1, 5)) +
+  scale_x_continuous(limits = c(1, 5.15),
+                     labels = str_wrap(c("Strongly disagree (1)", "Somewhat disagree (2)",
+                                "Neutral (3)",
+                                "Somewhat agree (4)", "Strongly agree (5)"), 12)) +
   scale_color_manual(values = c(intern_de_yellow, intern_de_blue)) +
   labs(title = "Change in mean participant preferences",
        subtitle = glue::glue("From <b><span style = color:{intern_de_yellow}>Pre-Program</span></b> to <b><span style = color:{intern_de_blue}>Post-Program</span></b>")) +
@@ -280,13 +283,14 @@ preferences_raw %>%
            color = "gray") +
   annotate("segment", x = -Inf, xend = Inf, y = -Inf, yend = -Inf,
            color = "gray") +
-  theme(panel.grid = element_blank(),
-        axis.title = element_blank(),
+  theme(axis.title = element_blank(),
         panel.spacing = unit(1, "line"),
         strip.text = element_text(face = "bold"),
         plot.title = element_text(face = "bold"),
         plot.title.position = "plot",
-        strip.placement = "outside")
+        strip.placement = "outside",
+        panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_blank())
 ```
 
 # Satisfaction
@@ -330,18 +334,20 @@ satisfaction_raw %>%
             nudge_x = 0.01) +
   facet_grid(~category) +
   scale_x_continuous(labels = scales::percent,
-                     limits = c(0, 0.7),
+                     limits = c(0, 0.8),
                      expand = c(0, 0)) +
+  scale_y_discrete(labels = ~str_wrap(., 10)) +
   labs(title = "Percent of participants selecting satisfaction by category") +
   coord_cartesian(clip = "off") +
   annotate("segment", x = -Inf, xend = -Inf, y = -Inf, yend = Inf,
            color = "gray") +
   theme(strip.text = element_textbox_simple(),
-        panel.grid = element_blank(),
         axis.title = element_blank(),
-        panel.spacing = unit(1, "line"),
+        panel.spacing = unit(1.5, "line"),
         plot.title = element_text(face = "bold"),
-        plot.title.position = "plot")
+        plot.title.position = "plot",
+        panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_blank())
 ```
 
 # Goals
@@ -446,7 +452,7 @@ intern_joined_final %>%
             nudge_x = 0.01) +
   scale_x_continuous(labels = scales::percent,
                      expand = c(0, 0),
-                     limits = c(0, 1)) +
+                     limits = c(0, 1.05)) +
   labs(title = "Percent of participants selecting interests by category") +
   coord_cartesian(clip = "off") +
   annotate("segment", x = -Inf, xend = -Inf, y = -Inf, yend = Inf,
@@ -545,8 +551,7 @@ attendance_average_employer %>%
   coord_cartesian(clip = "off") +
   annotate("segment", x = -Inf, xend = -Inf, y = -Inf, yend = Inf,
            color = "gray") +
-  theme(panel.grid = element_blank(),
-        axis.title = element_blank(),
+  theme(axis.title = element_blank(),
         panel.spacing = unit(1, "line"),
         plot.title = element_text(face = "bold"),
         plot.title.position = "plot",
@@ -563,6 +568,8 @@ attendance_counts %>%
              x = attendance_count)) +
   geom_boxplot(fill = intern_de_blue,
                color = "gray") +
+  scale_x_continuous(expand = c(0, 0),
+                     limits = c(0, 20)) +
   labs(title = "Intern participation distribution by employer") +
   coord_cartesian(clip = "off") +
   theme(axis.title = element_blank(),
